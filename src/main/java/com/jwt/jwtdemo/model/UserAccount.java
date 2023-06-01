@@ -5,11 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+import static jakarta.persistence.FetchType.EAGER;
+
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_account")
+@Table(name = "user_tbl")
 public class UserAccount {
 
     @Id
@@ -27,6 +31,16 @@ public class UserAccount {
 
     @Column(name = "phone_no", length = 10, nullable = false)
     private String phoneNumber;
+
+    @ManyToMany(fetch = EAGER)
+       @JoinTable(
+               name = "account_role",
+               joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+               foreignKey = @ForeignKey(name = "fk_user_roleId"),
+               inverseForeignKey = @ForeignKey(name = "fk_role_userId")
+       )
+    List<Role> roles;
 
 
 }
