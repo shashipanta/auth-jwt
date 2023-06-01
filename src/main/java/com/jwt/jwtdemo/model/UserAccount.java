@@ -1,6 +1,5 @@
 package com.jwt.jwtdemo.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "user")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user_account")
 public class UserAccount {
 
     @Id
@@ -26,7 +25,7 @@ public class UserAccount {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone_no", nullable = false)
+    @Column(name = "phone_no", length = 10, nullable = false)
     private String phoneNumber;
 
 
