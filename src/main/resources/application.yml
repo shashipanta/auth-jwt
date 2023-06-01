@@ -18,3 +18,8 @@ spring:
       hibernate:
         format-sql: true
 
+  security:
+    user:
+      name: admin
+      password: admin
+
