@@ -2,11 +2,15 @@ package com.jwt.jwtdemo.model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "user")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserAccount {
 
     @Id
