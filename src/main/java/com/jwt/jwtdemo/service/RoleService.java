@@ -11,4 +11,6 @@ public interface RoleService {
     RoleResponse createRole(RoleRequest roleRequest);
     List<RoleResponse>  getRegisteredRoles();
 
+    void assignRoleToUser(Long roleId, Long userId);
+
 }

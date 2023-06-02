@@ -27,4 +27,9 @@ public class RoleController {
     }
 
 
+    @PostMapping(value = "/{roleId}/assign/{userId}")
+    public void assignRoleToUser(@PathVariable("roleId") Long roleId, @PathVariable("userId") Long userId){
+        roleService.assignRoleToUser(roleId, userId);
+    }
+
 }

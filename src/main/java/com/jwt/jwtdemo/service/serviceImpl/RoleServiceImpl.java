@@ -30,4 +30,11 @@ public class RoleServiceImpl implements RoleService {
                 .map(RoleResponse::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void assignRoleToUser(Long roleId, Long userId) {
+
+        roleRepo.assignRoleToUser(roleId, userId);
+
+    }
 }
