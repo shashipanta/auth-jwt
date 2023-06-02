@@ -1,6 +1,7 @@
 package com.jwt.jwtdemo.init;
 
 import com.jwt.jwtdemo.dto.request.RoleRequest;
+import com.jwt.jwtdemo.dto.request.UserAccountRequest;
 import com.jwt.jwtdemo.model.Role;
 import com.jwt.jwtdemo.repo.RoleRepo;
 import com.jwt.jwtdemo.repo.UserAccountRepo;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -27,13 +30,16 @@ public class DatabaseInitializer implements CommandLineRunner {
         RoleRequest editorRole = new RoleRequest(789l, 2);
 
         log.info("Adding default roles : {}");
-        log.info("ROLE_ADMIN : {}",adminRole );
-        log.info("ROLE_USER : {}", userRole );
-        log.info("ROLE_EDITOR : {}", editorRole );
 
-        roleService.createRole(adminRole);
+//        log.info("ROLE_ADMIN : {}",adminRole );
+//        roleService.createRole(adminRole);
+        log.info("ROLE_USER : {}", userRole );
         roleService.createRole(userRole);
+        log.info("ROLE_EDITOR : {}", editorRole );
         roleService.createRole(editorRole);
 
+        UserAccountRequest userAdmin = new UserAccountRequest("admin", "admin@gmail.com", "admin", "9875346765", List.of(adminRole));
+        log.info("Creating default admin user : {}", userAdmin);
+        userAccountService.registerUserAccount(userAdmin);
     }
 }

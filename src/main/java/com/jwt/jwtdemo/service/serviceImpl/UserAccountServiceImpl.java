@@ -7,6 +7,7 @@ import com.jwt.jwtdemo.model.UserAccount;
 import com.jwt.jwtdemo.repo.UserAccountRepo;
 import com.jwt.jwtdemo.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepo userAccountRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserAccountResponse registerUserAccount(UserAccountRequest userAccountRequest) {
         UserAccount userAccount = UserAccountRequest.toUserAccount(userAccountRequest);
+        userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
         return new UserAccountResponse(userAccountRepo.save(userAccount));
     }
 

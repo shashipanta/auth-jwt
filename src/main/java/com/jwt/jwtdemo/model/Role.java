@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "role")
+@Table(name = "role",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_role_roleName", columnNames = "role_name")
+        }
+)
 public class Role {
 
     @Id

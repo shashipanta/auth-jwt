@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.EAGER;
 
 @Data
@@ -32,7 +33,7 @@ public class UserAccount {
     @Column(name = "phone_no", length = 10, nullable = false)
     private String phoneNumber;
 
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = EAGER, cascade = {ALL})
        @JoinTable(
                name = "account_role",
                joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
