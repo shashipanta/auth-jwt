@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,8 +29,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccountResponse registerUserAccount(UserAccountRequest userAccountRequest) {
-        List<RoleRequest> roleRequestToSave = filterRoleRequest(userAccountRequest);
-        userAccountRequest.setRoleRequest(roleRequestToSave);
+        if(userAccountRequest.getRoleRequest() != null){
+            List<RoleRequest> roleRequestToSave = filterRoleRequest(userAccountRequest);
+            userAccountRequest.setRoleRequest(roleRequestToSave);
+        }
+
 
         UserAccount userAccount = UserAccountRequest.toUserAccount(userAccountRequest);
         userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
@@ -60,12 +61,13 @@ public class UserAccountServiceImpl implements UserAccountService {
         List<RoleRequest> roleRequestToSave = new ArrayList<>();
 
         List<RoleRequest> request = userAccountRequest.getRoleRequest();
+
         List<RoleRequest> saved = roleService.getRegisteredRoles()
                 .stream()
                 .map(RoleResponse::toRoleRequest)
                 .collect(Collectors.toList());
 
-        if(saved.size() == 0){
+        if(saved.size() == 0 || request == null){
             return new ArrayList<>(request);
         }
 
