@@ -31,8 +31,8 @@ public class DatabaseInitializer implements CommandLineRunner {
 
         log.info("Adding default roles : {}");
 
-//        log.info("ROLE_ADMIN : {}",adminRole );
-//        roleService.createRole(adminRole);
+        log.info("ROLE_ADMIN : {}",adminRole );
+        roleService.createRole(adminRole);
         log.info("ROLE_USER : {}", userRole );
         roleService.createRole(userRole);
         log.info("ROLE_EDITOR : {}", editorRole );
@@ -41,5 +41,18 @@ public class DatabaseInitializer implements CommandLineRunner {
         UserAccountRequest userAdmin = new UserAccountRequest("admin", "admin@gmail.com", "admin", "9875346765", List.of(adminRole));
         log.info("Creating default admin user : {}", userAdmin);
         userAccountService.registerUserAccount(userAdmin);
+
+        UserAccountRequest userUser = new UserAccountRequest("user", "user@gmail.com", "user", "9845678123", List.of(userRole));
+        log.info("Creating default User user : {}", userUser);
+        userAccountService.registerUserAccount(userUser);
+//
+        UserAccountRequest userEditor = new UserAccountRequest("editor", "editor@gmail.com", "user", "9846762435", List.of(editorRole));
+        log.info("Creating default User user : {}", userEditor);
+        userAccountService.registerUserAccount(userEditor);
+
+        UserAccountRequest userWithMultipleRoles = new UserAccountRequest("multi", "multi@gmail.com", "multi", "9846728944", List.of(editorRole, userRole,adminRole));
+        log.info("Creating default User MultiRoleUser : {}", userWithMultipleRoles);
+        userAccountService.registerUserAccount(userWithMultipleRoles);
+
     }
 }

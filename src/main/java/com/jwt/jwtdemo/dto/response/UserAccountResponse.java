@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class UserAccountResponse {
@@ -14,7 +15,7 @@ public class UserAccountResponse {
     private String userName;
     private String email;
     private String phoneNumber;
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public UserAccountResponse(UserAccount userAccount){
         this.userName = userAccount.getUsername();

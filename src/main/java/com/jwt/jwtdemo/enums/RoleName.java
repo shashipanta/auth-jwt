@@ -20,4 +20,8 @@ public enum RoleName {
                 .findFirst()
                 .orElseThrow();
     }
+
+    public static String roleNameToString(RoleName roleName){
+        return roleName.name();
+    }
 }
