@@ -2,9 +2,6 @@ package com.jwt.jwtdemo.init;
 
 import com.jwt.jwtdemo.dto.request.RoleRequest;
 import com.jwt.jwtdemo.dto.request.UserAccountRequest;
-import com.jwt.jwtdemo.model.Role;
-import com.jwt.jwtdemo.repo.RoleRepo;
-import com.jwt.jwtdemo.repo.UserAccountRepo;
 import com.jwt.jwtdemo.service.RoleService;
 import com.jwt.jwtdemo.service.UserAccountService;
 import lombok.RequiredArgsConstructor;

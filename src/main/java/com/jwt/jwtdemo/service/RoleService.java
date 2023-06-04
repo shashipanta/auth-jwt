@@ -13,4 +13,7 @@ public interface RoleService {
 
     void assignRoleToUser(Long roleId, Long userId);
 
+    RoleResponse getRoleById(Long roleId);
+
+    List<RoleResponse> getRolesAssociatedToUser(Long userId);
 }

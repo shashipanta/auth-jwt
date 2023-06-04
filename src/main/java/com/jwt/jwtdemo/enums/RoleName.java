@@ -24,4 +24,8 @@ public enum RoleName {
     public static String roleNameToString(RoleName roleName){
         return roleName.name();
     }
+
+    public static RoleName stringToRoleName(String roleName){
+        return  RoleName.valueOf(roleName);
+    }
 }

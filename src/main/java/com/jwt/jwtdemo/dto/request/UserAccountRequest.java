@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAccountRequest {
+
+    private Long id;
 
     @NotNull(message = "Username cannot be blank")
     @Size(max = 100, min = 5, message = "username must be of length 5-100")
@@ -35,12 +38,13 @@ public class UserAccountRequest {
 
     private List<RoleRequest> roleRequest;
 
-//    public UserAccountRequest(String userName, String email, String password, String phoneNumber){
-//        this.userName = userName;
-//        this.email = email;
-//        this.password = password;
-//        this.phoneNumber = phoneNumber;
-//    }
+    public UserAccountRequest(String userName, String email, String password, String phoneNumber, List<RoleRequest> roleRequest){
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.roleRequest = roleRequest;
+    }
 
 
     public static UserAccount toUserAccount(UserAccountRequest userAccountRequest) {
@@ -58,5 +62,17 @@ public class UserAccountRequest {
             userAccount.setRoles(roleList);
         }
         return userAccount;
+    }
+
+    public static UserAccountRequest toUserAccountRequest(UserAccount userAccount, List<RoleRequest> roleRequestList) {
+        UserAccountRequest userAccountRequest = new UserAccountRequest();
+        userAccountRequest.setId(userAccount.getId());
+        userAccountRequest.setUserName(userAccount.getUsername());
+        userAccountRequest.setEmail(userAccount.getEmail());
+        userAccountRequest.setPassword(userAccount.getPassword());
+        userAccountRequest.setPhoneNumber(userAccount.getPhoneNumber());
+
+        return userAccountRequest;
+
     }
 }

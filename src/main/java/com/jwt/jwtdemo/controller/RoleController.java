@@ -26,6 +26,11 @@ public class RoleController {
         return roleService.getRegisteredRoles();
     }
 
+    @GetMapping(value = "/{id}")
+    public RoleResponse getRoleById(@PathVariable("id") Long roleId){
+        return roleService.getRoleById(roleId);
+    }
+
 
     @PostMapping(value = "/{roleId}/assign/{userId}")
     public void assignRoleToUser(@PathVariable("roleId") Long roleId, @PathVariable("userId") Long userId){

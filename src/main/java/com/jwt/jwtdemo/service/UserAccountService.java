@@ -13,4 +13,8 @@ public interface UserAccountService {
     List<UserAccountResponse> getRegisteredUserAccounts();
 
     UserAccountMessage deleteUserAccountById(Long userId);
+
+    UserAccountResponse updateUserAccountById(UserAccountRequest userAccountRequest, Long userId);
+
+    UserAccountResponse assignRoleToUser(Long userId, Long roleId);
 }

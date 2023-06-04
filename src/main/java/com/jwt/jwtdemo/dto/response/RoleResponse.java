@@ -31,11 +31,17 @@ public class RoleResponse {
                 .intRoleName(intRoleName)
                 .roleCode(roleResponse.getRoleCode())
                 .build();
+    }
 
-//        Role role =  new Role();
-//        role.setId(roleResponse.getRoleId());
-//        role.setRoleName(roleName);
-//        role.setRoleCode(roleResponse.getRoleCode());
-//        return role;
+    public static Role toRole(RoleResponse roleResponse){
+        Role role = new Role();
+        role.setId(roleResponse.getRoleId());
+        role.setRoleCode(roleResponse.getRoleCode());
+
+        RoleName roleName = RoleName.stringToRoleName(roleResponse.getRoleName());
+
+        role.setRoleName(roleName);
+
+        return role;
     }
 }

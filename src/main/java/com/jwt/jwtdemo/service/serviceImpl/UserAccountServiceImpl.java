@@ -5,7 +5,6 @@ import com.jwt.jwtdemo.dto.request.RoleRequest;
 import com.jwt.jwtdemo.dto.request.UserAccountRequest;
 import com.jwt.jwtdemo.dto.response.RoleResponse;
 import com.jwt.jwtdemo.dto.response.UserAccountResponse;
-import com.jwt.jwtdemo.enums.RoleName;
 import com.jwt.jwtdemo.model.Role;
 import com.jwt.jwtdemo.model.UserAccount;
 import com.jwt.jwtdemo.repo.UserAccountRepo;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +29,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccountResponse registerUserAccount(UserAccountRequest userAccountRequest) {
-        if(userAccountRequest.getRoleRequest() != null){
+        if (userAccountRequest.getRoleRequest() != null) {
             List<RoleRequest> roleRequestToSave = filterRoleRequest(userAccountRequest);
             userAccountRequest.setRoleRequest(roleRequestToSave);
         }
@@ -56,8 +56,36 @@ public class UserAccountServiceImpl implements UserAccountService {
         return new UserAccountMessage("UserAccount deleted", "Del-code");
     }
 
+    @Override
+    public UserAccountResponse updateUserAccountById(UserAccountRequest userAccountRequest, Long userId) {
+        UserAccount foundAccount = userAccountRepo.findById(userId).orElseThrow();
+        foundAccount = prepareToUpdate(userAccountRequest, foundAccount);
+        foundAccount = userAccountRepo.save(foundAccount);
 
-    private List<RoleRequest> filterRoleRequest(UserAccountRequest userAccountRequest){
+        return new UserAccountResponse(foundAccount);
+    }
+
+    @Override
+    public UserAccountResponse assignRoleToUser(Long userId, Long roleId) {
+        List<RoleResponse> userRoles = roleService.getRolesAssociatedToUser(userId);
+        List<RoleRequest> roleRequests = userRoles.stream()
+                .map(RoleResponse::toRoleRequest)
+                .collect(Collectors.toList());
+        UserAccount userAccount = userAccountRepo.findById(userId).orElseThrow();
+
+        RoleResponse requestedRole = roleService.getRoleById(roleId);
+        roleRequests.add(RoleResponse.toRoleRequest(requestedRole));
+
+        UserAccountRequest userAccountRequest = UserAccountRequest.toUserAccountRequest(userAccount, roleRequests);
+
+        userAccountRequest.setRoleRequest(roleRequests);
+        UserAccountResponse response = this.updateUserAccountById(userAccountRequest, userId);
+
+        return response;
+    }
+
+
+    private List<RoleRequest> filterRoleRequest(UserAccountRequest userAccountRequest) {
         List<RoleRequest> roleRequestToSave = new ArrayList<>();
 
         List<RoleRequest> request = userAccountRequest.getRoleRequest();
@@ -67,29 +95,46 @@ public class UserAccountServiceImpl implements UserAccountService {
                 .map(RoleResponse::toRoleRequest)
                 .collect(Collectors.toList());
 
-        if(saved.size() == 0 || request == null){
+        if (saved.size() == 0) {
             return new ArrayList<>(request);
         }
 
         boolean requestFound = false;
 
-        for(int i=0; i<request.size(); i++){
+        for (int i = 0; i < request.size(); i++) {
             RoleRequest requestedRole = request.get(i);
-            for(int j=0; j<saved.size(); j++){
+            for (int j = 0; j < saved.size(); j++) {
                 RoleRequest savedRole = saved.get(j);
-                if(requestedRole.getIntRoleName() == savedRole.getIntRoleName()){
+                if (requestedRole.getIntRoleName().equals(savedRole.getIntRoleName())) {
                     requestedRole.setId(savedRole.getId());
                     roleRequestToSave.add(requestedRole);
                     requestFound = true;
                     break;
                 }
             }
-            if(!requestFound){
+            if (!requestFound) {
                 roleRequestToSave.add(requestedRole);
             }
         }
 
         return roleRequestToSave;
+    }
+
+
+    public static UserAccount prepareToUpdate(UserAccountRequest userRequest, UserAccount foundUserAccount) {
+        if (userRequest.getUserName() != null) foundUserAccount.setUsername(userRequest.getUserName());
+        if (userRequest.getEmail() != null) foundUserAccount.setEmail(userRequest.getEmail());
+        if (userRequest.getPhoneNumber() != null) foundUserAccount.setPhoneNumber(userRequest.getPhoneNumber());
+//        if (userRequest.getPassword() != null) foundUserAccount.setPassword(pa);
+        if (userRequest.getRoleRequest() != null) {
+            Set<Role> roleSet =
+                    userRequest.getRoleRequest().stream()
+                            .map(RoleRequest::toRole)
+                            .collect(Collectors.toSet());
+            foundUserAccount.setRoles(roleSet);
+        }
+
+        return foundUserAccount;
     }
 
 }

@@ -37,4 +37,19 @@ public class RoleServiceImpl implements RoleService {
         roleRepo.assignRoleToUser(roleId, userId);
 
     }
+
+    @Override
+    public RoleResponse getRoleById(Long roleId) {
+        Role role =  roleRepo.findById(roleId).orElseThrow();
+        return new RoleResponse(role);
+    }
+
+    public List<RoleResponse> getRolesAssociatedToUser(Long userId){
+        List<Role> roles = roleRepo.getRolesAssociatedToUser(userId);
+
+        return roles.stream()
+                .map(RoleResponse::new)
+                .collect(Collectors.toList());
+
+    }
 }
