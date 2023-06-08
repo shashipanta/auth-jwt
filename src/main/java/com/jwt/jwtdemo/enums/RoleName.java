@@ -6,9 +6,16 @@ import java.util.List;
 
 public enum RoleName {
 
-    ROLE_ADMIN,
-    ROLE_USER,
-    ROLE_EDITOR;
+    ROLE_ADMIN(1),
+    ROLE_USER(2),
+    ROLE_TESTER(3),
+    ROLE_EDITOR(4);
+
+    public final Integer roleIntVal;
+
+    RoleName(Integer roleIntVal){
+        this.roleIntVal = roleIntVal;
+    }
 
     private static List<RoleName> roles = Arrays.asList(RoleName.values());
 
