@@ -5,6 +5,7 @@ import com.jwt.jwtdemo.auth.dto.AuthRequest;
 import com.jwt.jwtdemo.auth.dto.AuthResponse;
 import com.jwt.jwtdemo.model.UserAccount;
 import com.jwt.jwtdemo.repo.UserAccountRepo;
+import com.jwt.jwtdemo.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService extends BaseService {
 
     private final JwtService jwtService;
     private final UserAccountRepo userAccountRepo;
@@ -23,6 +24,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public AuthResponse attemptLogin(AuthRequest authRequest){
+
+        super.validate(authRequest);
 
         UserAccount userAccount = userAccountRepo.findByEmail(authRequest.getUserEmail()).orElseThrow();
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userAccount.getEmail());

@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @GetMapping(value = "/login")
-    public ResponseEntity<AuthResponse> attemptLogin(@RequestBody @Valid AuthRequest authRequest) {
+    public ResponseEntity<AuthResponse> attemptLogin(@RequestBody AuthRequest authRequest) {
         return ResponseEntity.ok(authService.attemptLogin(authRequest));
     }
 }
