@@ -1,6 +1,8 @@
 package com.jwt.jwtdemo.auth.filter;
 
 import com.jwt.jwtdemo.auth.service.JwtService;
+import com.jwt.jwtdemo.error.codes.ErrorCodes;
+import com.jwt.jwtdemo.error.exception.impl.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +40,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // if no bearer token then skip this
         if (authHeader != null && authHeader.startsWith("Bearer")) {
             String passedToken = authHeader.substring(7);
+
+            // first check token expiration then proceed
+//            if (jwtService.isTokenExpired(passedToken))
+//                throw new TokenExpiredException(ErrorCodes.TOKEN_EXPIRED, "Token expire bhayo daju");
+
             String userEmail = jwtService.extractUsername(passedToken);
+
 
             // what if user is already authenticated
             Boolean isUserAuthenticated = SecurityContextHolder.getContext().getAuthentication() != null;

@@ -30,6 +30,7 @@ public class AuthService extends BaseService {
         UserAccount userAccount = userAccountRepo.findByEmail(authRequest.getUserEmail()).orElseThrow();
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userAccount.getEmail());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getUserEmail(), authRequest.getUserPassword());
+
         additionalAuthenticationChecks(userDetails,authenticationToken );
 
         String token = jwtService.generateToken(userDetails);
